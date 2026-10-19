@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/RideTrip-tour/internal_middleware"
+"Homepage" = "https://github.com/RideTrip-tour/middlewares.git"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

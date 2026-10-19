@@ -14,7 +14,6 @@ from src.internal_middleware import user_claims, build_user_context_middleware
 
 
 def _b64url(data: dict) -> str:
-    """Хелпер: dict → base64url-строка без padding."""
     raw = json.dumps(data).encode("utf-8")
     return base64.urlsafe_b64encode(raw).rstrip(b"=").decode("ascii")
 
@@ -77,14 +76,12 @@ def test_invalid_base64(client: TestClient) -> None:
 
 
 def test_invalid_json(client: TestClient) -> None:
-    # base64 от строки "not a json"
     bad = base64.urlsafe_b64encode(b"not a json").rstrip(b"=").decode()
     resp = client.get("/me", headers={"x-user-claims": bad})
     assert resp.status_code == 401
 
 
 def test_json_not_object(client: TestClient) -> None:
-    # base64 от JSON-массива, а не объекта
     bad = base64.urlsafe_b64encode(b"[1,2,3]").rstrip(b"=").decode()
     resp = client.get("/me", headers={"x-user-claims": bad})
     assert resp.status_code == 401
@@ -106,7 +103,7 @@ def test_claims_takes_priority_over_user_id(client: TestClient) -> None:
 def test_context_reset_between_requests(client: TestClient) -> None:
     """ContextVar не должен протекать между запросами."""
     client.get("/me", headers={"x-user-claims": _b64url({"user_id": 1})})
-    resp = client.get("/me")  # без заголовков
+    resp = client.get("/me")
     assert resp.json()["claims"] == {}
 
 

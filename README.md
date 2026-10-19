@@ -9,7 +9,7 @@ FastAPI middleware для извлечения user context из заголов�
 
 ```toml
 dependencies = [
-    "internal-middleware @ git+ssh://git@github.com/RideTrip-tour/internal_middleware.git@v0.1.0",
+    "internal-middleware @ git+ssh://github.com/RideTrip-tour/middlewares.git@<tag>",
 ]
 ```
 
