@@ -46,7 +46,7 @@ def _process_claims(claims_header: str, request: Request, logger: logging.Logger
     user_id = _extract_user_id(user_data)
     if user_id is not None:
         request.state.user_id = user_id
-    logger.debug("User data loaded from claims: %s", {list(user_data.keys())})
+    logger.debug("User data loaded from claims: %s", list(user_data.keys()))
 
 
 def _process_user_id(user_id_header: str, request: Request, logger: logging.Logger):
@@ -55,11 +55,11 @@ def _process_user_id(user_id_header: str, request: Request, logger: logging.Logg
         user_id_int = int(user_id_header)
         request.state.user = {"sub": str(user_id_int), "user_id": user_id_int}
         request.state.user_id = user_id_int
-        logger.debug("User ID loaded from header: %s", {user_id_int})
+        logger.debug("User ID loaded from header: %s", user_id_int)
     except (TypeError, ValueError):
         request.state.user = {"sub": user_id_header, "user_id": user_id_header}
         request.state.user_id = user_id_header
-        logger.debug("User ID (string) loaded from header: %s", {user_id_header})
+        logger.debug("User ID (string) loaded from header: %s", user_id_header)
 
 
 def build_user_context_middleware(
