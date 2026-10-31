@@ -4,8 +4,8 @@ import uuid
 from fastapi import Request
 from starlette.responses import Response
 
-from src.internal_middleware.context import request_id_var
-from src.internal_middleware.constants import REQUEST_ID_PATTERN
+from .context import request_id_var
+from .constants import REQUEST_ID_PATTERN
 
 
 def _get_request_id(
