@@ -2,9 +2,9 @@ import base64
 import json
 import sys
 from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -16,30 +16,6 @@ from src.internal_middleware import user_claims, build_user_context_middleware
 def _b64url(data: dict) -> str:
     raw = json.dumps(data).encode("utf-8")
     return base64.urlsafe_b64encode(raw).rstrip(b"=").decode("ascii")
-
-
-@pytest.fixture
-def app() -> FastAPI:
-    app = FastAPI()
-    app.middleware("http")(build_user_context_middleware())
-
-    @app.get("/me")
-    async def me():
-        return {"claims": user_claims.get()}
-
-    @app.get("/me-state")
-    async def me_state(request):
-        return {
-            "user": getattr(request.state, "user", None),
-            "user_id": getattr(request.state, "user_id", None),
-        }
-
-    return app
-
-
-@pytest.fixture
-def client(app: FastAPI) -> TestClient:
-    return TestClient(app)
 
 
 def test_claims_header_happy_path(client: TestClient) -> None:

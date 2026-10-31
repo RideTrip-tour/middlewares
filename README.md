@@ -1,7 +1,7 @@
 # internal-middleware
 
 FastAPI middleware для извлечения user context из заголовков
-`X-User-Claims` и `X-User-ID`.
+`X-User-Claims` и `X-User-ID`, а также идентификатора запроса `X-Request-ID`.
 
 ## Установка
 
@@ -40,9 +40,17 @@ python -c "import internal_middleware; print(internal_middleware.__file__)"
 import logging
 from internal_middleware import build_user_context_middleware
 
+
+logger = logging.getLogger("my-service")
+
+
+app.middleware("http")(
+    build_request_id_middleware(logger=logger)
+)
+
 app.middleware("http")(
     build_user_context_middleware(
-        logger=logging.getLogger("my-service"),
+        logger=logging.getLogger(logger=logger),
     )
 )
 ```
@@ -58,7 +66,7 @@ async def me():
     return {"user_id": claims.get("user_id")}
 ```
 
-## Параметры фабрики
+## Параметры фабрики `build_user_context_middleware`
 
 | Параметр | По умолчанию | Описание |
 |---|---|---|
@@ -72,3 +80,21 @@ async def me():
 - Если только `X-User-ID` — используется он (число парсится как int).
 - Если ничего нет — `user_claims.get()` вернёт `{}`.
 - Если заголовок битый — ответ 401 `{"detail": "Unauthorized"}`.
+
+
+## Параметры фабрики `build_request_id_middleware`
+
+| Параметр | По умолчанию | Описание |
+|---|---|---|
+| `logger` | `logging.getLogger(__name__)` | Логгер сервиса |
+| `header_name` | `"X-Request-ID"` | Заголовок с идентификатором запроса |
+
+### Поведение
+
+- Если `X-Request-ID` передан и соответствует допустимому формату - используется полученное значение.
+- Если заголовок отсутствует или содержит недопустимое значение - генерируется новый UUID4.
+- Идентификатор сохраняется в `request.state.request_id`.
+- Идентификатор устанавливается в `request_id_var` на время обработки запроса.
+- В ответ добавляется заголовок `X-Request-ID` с тем же идентификатором.
+- После завершения обработки запроса контекст сбрасывается через `ContextVar.reset()`.
+- При исключениях контекст также сбрасывается.
