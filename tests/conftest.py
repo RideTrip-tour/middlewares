@@ -10,7 +10,6 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
-
 from src.internal_middleware import (
     build_request_id_middleware,
     build_user_context_middleware,

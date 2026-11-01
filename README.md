@@ -44,9 +44,7 @@ from internal_middleware import build_user_context_middleware
 logger = logging.getLogger("my-service")
 
 
-app.middleware("http")(
-    build_request_id_middleware(logger=logger)
-)
+app.middleware("http")(build_request_id_middleware(logger=logger))
 
 app.middleware("http")(
     build_user_context_middleware(
@@ -59,6 +57,7 @@ app.middleware("http")(
 
 ```python
 from internal_middleware import user_claims
+
 
 @app.get("/me")
 async def me():
