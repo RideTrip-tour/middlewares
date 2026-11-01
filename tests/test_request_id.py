@@ -3,19 +3,18 @@ import sys
 import uuid
 from pathlib import Path
 
+import pytest
 from fastapi import FastAPI, Request
 from fastapi.testclient import TestClient
 from starlette.responses import Response
-import pytest
-
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.internal_middleware import (
-    request_id_var,
     build_request_id_middleware,
+    request_id_var,
 )
 
 
