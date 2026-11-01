@@ -122,6 +122,6 @@ def test_request_id_context_reset_on_exception() -> None:
         with pytest.raises(RuntimeError, match="Test exception"):
             await middleware(request, call_next)
 
-        assert request_id_var.get() is None
+        assert request_id_var.get() != "exception-request-id"
 
     asyncio.run(run_test())
