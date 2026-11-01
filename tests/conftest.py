@@ -5,18 +5,16 @@ import pytest
 from fastapi import FastAPI, Request
 from fastapi.testclient import TestClient
 
-
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
-
 from src.internal_middleware import (
-    user_claims,
-    request_id_var,
-    build_user_context_middleware,
     build_request_id_middleware,
+    build_user_context_middleware,
+    request_id_var,
+    user_claims,
 )
 
 

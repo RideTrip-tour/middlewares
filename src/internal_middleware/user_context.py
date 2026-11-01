@@ -97,4 +97,5 @@ def build_user_context_middleware(
             return await call_next(request)
         finally:
             user_claims.reset(token)
+
     return user_context_middleware

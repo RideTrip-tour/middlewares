@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.internal_middleware import user_claims, build_user_context_middleware
+from src.internal_middleware import build_user_context_middleware, user_claims
 
 
 def _b64url(data: dict) -> str:
