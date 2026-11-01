@@ -28,10 +28,7 @@ def _extract_user_id(user_data: dict) -> int | str | None:
     user_id = user_data.get("user_id") or user_data.get("sub") or user_data.get("id")
     if user_id is None:
         return None
-    try:
-        return int(user_id)
-    except (TypeError, ValueError):
-        return str(user_id)
+    return int(user_id)
 
 
 def _process_claims(claims_header: str, request: Request, logger: logging.Logger):
