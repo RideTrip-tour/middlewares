@@ -23,7 +23,7 @@ def _urlsafe_b64decode_padded(value: str) -> bytes:
         raise ValueError("Invalid baase64 encoding")
 
 
-def _extract_user_id(user_data: dict) -> int | str | None:
+def _extract_user_id(user_data: dict) -> int | None:
     """Extract user_id from user_data."""
     user_id = user_data.get("user_id") or user_data.get("sub") or user_data.get("id")
     if user_id is None:
